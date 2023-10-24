@@ -71,8 +71,6 @@ async function fetchMoviesByGenre(categoryName) {
     console.log('ERROR in fetchMoviesByGenre() function', error);
   }
 
-  console.log('MOVIES DATA', moviesData);
-
   return moviesData;
 }
 
