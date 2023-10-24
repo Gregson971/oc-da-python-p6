@@ -13,20 +13,61 @@ function fetchBestMovie() {
   fetch(BASE_URL + '?sort_by=-imdb_score')
     .then((response) => response.json())
     .then((data) => {
-      bestMovieTitle.innerHTML = data['results'][0]['title'];
-      bestMovieImg.src = data['results'][0]['image_url'];
-      bestMovieButton.setAttribute('onclick', `openModal("${data['results'][0]['id']}")`);
       fetch(data['results'][0]['url'])
         .then((response) => response.json())
         .then((data) => {
           loader.style.display = 'none';
+          bestMovieTitle.innerHTML = data['title'];
           bestMovieDesc.innerHTML = data['description'];
+          bestMovieImg.src = data['image_url'];
+          bestMovieButton.setAttribute('onclick', `openModal("${data['id']}")`);
         });
     })
     .catch(function (err) {
       loader.style.display = 'none';
       console.log('ERROR in fetchBestMovie() function', err);
     });
+}
+
+// Get movies by genre - 7 in total
+async function fetchMoviesByGenre(categoryName) {
+  const totalMovies = 7;
+  const itemsPerFetch = 5;
+  let moviesData = [];
+
+  try {
+    const initialResponse = await fetch(BASE_URL + '?genre=' + categoryName + '&sort_by=-imdb_score');
+    const initialData = await initialResponse.json();
+
+    if (initialData.count === 0) {
+      return moviesData;
+    }
+
+    for (let i = 0; i < Math.min(totalMovies, initialData.results.length); i++) {
+      const movieUrl = initialData.results[i].url;
+      const movieResponse = await fetch(movieUrl);
+      const movieInfo = await movieResponse.json();
+      moviesData.push(movieInfo);
+    }
+
+    if (totalMovies > itemsPerFetch && initialData.next) {
+      const nextPageResponse = await fetch(initialData.next);
+      const nextPageData = await nextPageResponse.json();
+
+      for (let i = 0; i < Math.min(totalMovies - itemsPerFetch, nextPageData.results.length); i++) {
+        const movieUrl = nextPageData.results[i].url;
+        const movieResponse = await fetch(movieUrl);
+        const movieInfo = await movieResponse.json();
+        moviesData.push(movieInfo);
+      }
+    }
+  } catch (error) {
+    console.log('ERROR in fetchMoviesByGenre() function', error);
+  }
+
+  console.log('MOVIES DATA', moviesData);
+
+  return moviesData;
 }
 
 // Open the modal
@@ -43,7 +84,9 @@ function openModal(id) {
   };
 
   window.onclick = function (event) {
-    if (event.target === modal) modal.style.display = 'none';
+    if (event.target === modal) {
+      modal.style.display = 'none';
+    }
   };
 }
 
@@ -95,6 +138,9 @@ function fetchModalData(id) {
 function main() {
   window.addEventListener('load', () => {
     fetchBestMovie();
+    fetchMoviesByGenre('Sport');
+    fetchMoviesByGenre('Sport');
+    fetchMoviesByGenre('Sport');
   });
 }
 
