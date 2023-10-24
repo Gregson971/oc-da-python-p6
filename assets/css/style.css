@@ -10,20 +10,27 @@ body {
     margin: 0;
 }
 
-.wrapper {
-    margin: 0 auto;
-    max-width: 1200px;
-    width: 100%;
-    position: relative;
-    z-index: 1;
+footer {
+    background-color: #111111;
+    padding: 24px 0;
+    display: flex;
+    justify-content: center;
 }
 
 section {
     padding: 24px 0;
 }
 
-section:nth-child(odd) {
+section:nth-child(odd), .carousels section:nth-child(odd) {
     background-color: #2b2626;
+}
+
+.wrapper {
+    margin: 0 auto;
+    max-width: 1200px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
 }
 
 /* Loader */
@@ -76,6 +83,7 @@ button:hover {
     align-items: center;
     height: 80px;
     width: 100%;
+    background-color: #111111;
 }
 
 .header__logo img {
@@ -147,6 +155,105 @@ button:hover {
     margin-right: 16px;
 }
 
+/* Carrousel */
+
+.carousel-container {
+    align-items: center;
+    display: flex;
+    height: 430px;
+    overflow: hidden;
+    position: relative;
+}
+
+.carousel-content {
+    bottom: -390px;
+    display: flex;
+    left: 0;
+    position: absolute;
+    top: 300px;
+    transform: translateY(-50%);
+    transition: all 0.7s ease;
+}
+
+.movieCard {
+    margin-right: 70px;
+    width: 200px;
+}
+
+.movieCard img,
+.best_movie .cover,
+.modal__cover {
+    border-radius: 8px;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.4);
+    transition: .5s ease;
+    width: 240px;
+}
+
+.nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #222222;
+    color: white;
+    font-size: 36px;
+    height: 370px;
+    opacity: 0;
+    padding: 0;
+    position: absolute;
+    transform: translateY(-50%) scale(0.5);
+    transition: all 0.05s ease;
+    visibility: hidden;
+    width: 40px;
+}
+
+.nav-btn.show {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+    visibility: visible;
+}
+
+.nav-btn.left {
+    left: 0;
+}
+
+.nav-btn.right {
+    right: 0;
+}
+
+
+/* Overlay */
+
+.overlay {
+    opacity: 0;
+    text-align: center;
+    transform: translate(10%, -180%);
+    transition: .5s ease;
+}
+
+.movieCard:hover img {
+    opacity: 0.2;
+}
+
+.movieCard:hover .overlay {
+    opacity: 1;
+}
+
+.overlay p {
+    font-size: 15px;
+    font-weight: bold;
+    padding-bottom: 90px
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay-button {
+    margin-right: 8px;
+}
+
 /* Modal */
 
 .modal {
@@ -186,7 +293,8 @@ button:hover {
 }
 
 .modal__movieInfo {
-    width: 60%;
+    width: 80%;
+    margin-right: 16px;
 }
 
 .modal__close-btn {
