@@ -39,6 +39,7 @@ function fetchBestMovie() {
 async function fetchMoviesByGenre(categoryName) {
   const totalMovies = 7;
   const itemsPerFetch = 5;
+  const counter = categoryName === '' ? 1 : 0; // If the category is 'Best' we start from the second movie
   let moviesData = [];
 
   try {
@@ -49,7 +50,7 @@ async function fetchMoviesByGenre(categoryName) {
       return moviesData;
     }
 
-    for (let i = 0; i < Math.min(totalMovies, initialData.results.length); i++) {
+    for (let i = counter; i < Math.min(totalMovies, initialData.results.length); i++) {
       const movieUrl = initialData.results[i].url;
       const movieResponse = await fetch(movieUrl);
       const movieInfo = await movieResponse.json();
@@ -60,7 +61,7 @@ async function fetchMoviesByGenre(categoryName) {
       const nextPageResponse = await fetch(initialData.next);
       const nextPageData = await nextPageResponse.json();
 
-      for (let i = 0; i < Math.min(totalMovies - itemsPerFetch, nextPageData.results.length); i++) {
+      for (let i = 0; i < Math.min(totalMovies - itemsPerFetch + counter, nextPageData.results.length); i++) {
         const movieUrl = nextPageData.results[i].url;
         const movieResponse = await fetch(movieUrl);
         const movieInfo = await movieResponse.json();
